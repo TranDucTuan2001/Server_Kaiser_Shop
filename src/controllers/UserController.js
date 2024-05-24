@@ -46,7 +46,7 @@ const loginUser = async (req, res) => {
     } else if (!isCheckEmail) {
       return res.status(200).json({
         status: "ERR",
-        message: "Không đúng định dạng emai",
+        message: "Không đúng định dạng email",
       });
     }
     const response = await UserService.loginUser(req.body);

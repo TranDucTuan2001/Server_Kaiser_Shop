@@ -13,7 +13,7 @@ const createUser = (newUser) => {
       if (checkEmail !== null) {
         resolve({
           status: "ERR",
-          message: "The Email already",
+          message: "Email đã tồn tại",
         });
       }
       const hash = bcrypt.hashSync(password, 10);
@@ -46,7 +46,7 @@ const loginUser = (userLogin) => {
       if (checkUser === null) {
         resolve({
           status: "ERR",
-          message: "The user is not already",
+          message: "Người dùng không tồn tại",
         });
       }
       const comparePassword = bcrypt.compareSync(password, checkUser.password);
@@ -55,7 +55,7 @@ const loginUser = (userLogin) => {
       if (!comparePassword) {
         resolve({
           status: "ERR",
-          message: "The password or user is incorrect",
+          message: "Tài khoản hoặc mật khẩu không đúng",
         });
       }
       const access_token = await genneralAccessToken({
@@ -86,7 +86,7 @@ const updateUser = (id, data) => {
       if (checkUser === null) {
         resolve({
           status: "OK",
-          message: "The user is not already",
+          message: "Người dùng không tồn tại",
         });
         return; 
       }
@@ -115,14 +115,14 @@ const deleteUser = (id) => {
       if (checkUser === null) {
         resolve({
           status: "OK",
-          message: "The user is not already",
+          message: "Người dùng không tồn tại",
         });
       }
       await User.findByIdAndDelete(id);
 
       resolve({
         status: "OK",
-        message: "Delete user succsess",
+        message: "Xoá người dùng thành công",
       });
     } catch (e) {
       reject(e);
@@ -150,7 +150,7 @@ const getDetailsUser = (id) => {
       if (user === null) {
         resolve({
           status: "OK",
-          message: "The user is not already",
+          message: "Người dùng không tồn tại",
         });
       }
       resolve({
@@ -173,14 +173,14 @@ const deleteManyUser = (ids) => {
       if (checkUser === null) {
         resolve({
           status: "ERR",
-          message: "The Users are not already",
+          message: "Người dùng không tồn tại",
         });
       }
       await User.deleteMany({ _id: ids });
 
       resolve({
         status: "OK",
-        message: "Delete Users success",
+        message: "Xoá người dùng thành công",
       });
     } catch (e) {
       reject(e);

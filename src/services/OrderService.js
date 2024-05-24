@@ -95,7 +95,7 @@ const getAllDetailsOrder = (id) => {
       if (order === null) {
         resolve({
           status: "ERR",
-          message: "The order is not already",
+          message: "Đơn hàng không tồn tại",
         });
       }
       resolve({
@@ -118,7 +118,7 @@ const getDetailsOrder = (id) => {
       if (order === null) {
         resolve({
           status: "ERR",
-          message: "The order is not already",
+          message: "Đơn hàng không tồn tại",
         });
       }
       resolve({
@@ -164,7 +164,7 @@ const cancelOrder = (id, data) => {
       if (insufficientProducts.length > 0) {
         return resolve({
           status: "ERR",
-          message: `Sản phẩm: [${insufficientProducts.join(", ")}] ton tai !`,
+          message: `Sản phẩm: [${insufficientProducts.join(", ")}] tồn tại!`,
         });
       }
 
@@ -174,12 +174,12 @@ const cancelOrder = (id, data) => {
       if (order === null) {
         resolve({
           status: "ERR",
-          message: "The order is not already",
+          message: "Đơn hàng không tồn tại",
         });
       }
       resolve({
         status: "OK",
-        message: "Huỷ đơn hàng thành công !",
+        message: "Huỷ đơn hàng thành công!",
       });
     } catch (e) {
       reject(e);
@@ -209,7 +209,7 @@ const updateOrder = (id, data) => {
       if (checkOrder === null) {
         resolve({
           status: "OK",
-          message: "The Order is not already",
+          message: "Đơn hàng không tồn tại",
         });
         return; 
       }
@@ -234,14 +234,14 @@ const deleteOrder = (id) => {
       if (checkOrder === null) {
         resolve({
           status: "OK",
-          message: "The Order is not already",
+          message: "Đơn hàng không tồn tại",
         });
       }
       await Order.findByIdAndDelete(id);
 
       resolve({
         status: "OK",
-        message: "Delete Order succsess",
+        message: "Xoá đơn hàng thành công",
       });
     } catch (e) {
       reject(e);
@@ -257,14 +257,14 @@ const deleteManyOrder = (ids) => {
       if (checkOrder === null) {
         resolve({
           status: "ERR",
-          message: "The Orders are not already",
+          message: "Đơn hàng không tồn tại",
         });
       }
       await Order.deleteMany({ _id: ids });
 
       resolve({
         status: "OK",
-        message: "Delete Orders success",
+        message: "Xoá đơn hàng thành công",
       });
     } catch (e) {
       reject(e);

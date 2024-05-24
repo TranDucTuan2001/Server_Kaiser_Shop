@@ -12,7 +12,7 @@ const createProduct = (newProduct) => {
       if (checkProduct !== null) {
         resolve({
           status: "ERR",
-          message: "The name of product is already",
+          message: "Tên của sản phẩm đã tồn tại",
         });
       }
 
@@ -48,7 +48,7 @@ const updateProduct = (id, data) => {
       if (checkProduct !== null) {
         resolve({
           status: "ERR",
-          message: "The name of product is already used by another product",
+          message: "Tên của sản phẩm đã tồn tại",
         });
         return;
       }
@@ -82,14 +82,14 @@ const deleteProduct = (id) => {
       if (checkProduct === null) {
         resolve({
           status: "ERR",
-          message: "The Product is not already",
+          message: "Sản phẩm không tồn tại",
         });
       }
       await Product.findByIdAndDelete(id);
 
       resolve({
         status: "OK",
-        message: "Delete Product succsess",
+        message: "Xoá sản phẩm thành công",
       });
     } catch (e) {
       reject(e);
@@ -146,7 +146,7 @@ const getDetailsProduct = (id) => {
       if (product === null) {
         resolve({
           status: "ERR",
-          message: "The product is not already",
+          message: "Sản phẩm không tồn tại",
         });
       }
       resolve({
@@ -169,14 +169,14 @@ const deleteManyProduct = (ids) => {
       if (checkProduct === null) {
         resolve({
           status: "ERR",
-          message: "The Products are not already",
+          message: "Sản phẩm không tồn tại",
         });
       }
       await Product.deleteMany({ _id: ids });
 
       resolve({
         status: "OK",
-        message: "Delete Products success",
+        message: "Xoá sản phẩm thành công",
       });
     } catch (e) {
       reject(e);
