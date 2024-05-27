@@ -51,7 +51,6 @@ const loginUser = (userLogin) => {
       }
       const comparePassword = bcrypt.compareSync(password, checkUser.password);
 
-
       if (!comparePassword) {
         resolve({
           status: "ERR",
@@ -81,14 +80,13 @@ const updateUser = (id, data) => {
   return new Promise(async (resolve, reject) => {
     try {
       const checkUser = await User.findOne({ _id: id });
-    
 
       if (checkUser === null) {
         resolve({
           status: "OK",
           message: "Người dùng không tồn tại",
         });
-        return; 
+        return;
       }
       if (data.password) {
         const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -106,11 +104,67 @@ const updateUser = (id, data) => {
     }
   });
 };
+
+const updateUserPassword = (id, data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const checkUser = await User.findOne({ _id: id });
+
+      if (checkUser === null) {
+        resolve({
+          status: "OK",
+          message: "Người dùng không tồn tại",
+        });
+        return;
+      }
+
+      const comparePassword = await bcrypt.compare(
+        data.password,
+        checkUser.password
+      );
+
+      if (!comparePassword) {
+        resolve({
+          status: "ERR",
+          message: "Mật khẩu không đúng",
+        });
+        return;
+      }
+
+      if (data.newPassword !== data.confirmPassword) {
+        resolve({
+          status: "ERR",
+          message: "NewPassword phải bằng ConfirmPassword",
+        });
+        return;
+      }
+
+      if (data.newPassword) {
+        const hashedPassword = await bcrypt.hash(data.newPassword, 10);
+        data.password = hashedPassword;
+      }
+
+      const updateUser = await User.findByIdAndUpdate(
+        id,
+        { password: data.password },
+        { new: true }
+      );
+
+      resolve({
+        status: "OK",
+        message: "SUCCESS",
+        data: updateUser,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 const deleteUser = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
       const checkUser = await User.findOne({ _id: id });
-  
 
       if (checkUser === null) {
         resolve({
@@ -169,7 +223,6 @@ const deleteManyUser = (ids) => {
     try {
       const checkUser = await User.find({ _id: ids });
 
-
       if (checkUser === null) {
         resolve({
           status: "ERR",
@@ -195,5 +248,6 @@ module.exports = {
   deleteUser,
   getAllUser,
   getDetailsUser,
-  deleteManyUser
+  deleteManyUser,
+  updateUserPassword,
 };

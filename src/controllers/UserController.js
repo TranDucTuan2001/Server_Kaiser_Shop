@@ -55,9 +55,9 @@ const loginUser = async (req, res) => {
       httpOnly: true,
       secure: false,
       samesite: "strict",
-      path:'/'
+      path: "/",
     });
-    return res.status(200).json({...newReponese,refresh_token});
+    return res.status(200).json({ ...newReponese, refresh_token });
   } catch (e) {
     return res.status(404).json({
       message: e,
@@ -83,10 +83,29 @@ const updateUser = async (req, res) => {
     });
   }
 };
+
+const updateUserPassword = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const data = req.body;
+    if (!userId) {
+      return res.status(200).json({
+        status: "ERR",
+        message: "The userId is required",
+      });
+    }
+
+    const response = await UserService.updateUserPassword(userId, data);
+    return res.status(200).json(response);
+  } catch (e) {
+    return res.status(404).json({
+      message: e.message,
+    });
+  }
+};
 const deleteUser = async (req, res) => {
   try {
     const userId = req.params.id;
-
 
     if (!userId) {
       return res.status(200).json({
@@ -94,7 +113,7 @@ const deleteUser = async (req, res) => {
         message: "The userId is required",
       });
     }
-  
+
     const response = await UserService.deleteUser(userId);
     return res.status(200).json(response);
   } catch (e) {
@@ -133,14 +152,14 @@ const getDetailsUser = async (req, res) => {
 };
 const refreshToken = async (req, res) => {
   try {
-    let token = req.headers?.token?.split(' ')[1]
+    let token = req.headers?.token?.split(" ")[1];
     if (!token) {
       return res.status(200).json({
         status: "ERR",
         message: "The token is required",
       });
     }
-    
+
     const response = await JwtService.refreshToken(token);
     return res.status(200).json(response);
   } catch (e) {
@@ -191,4 +210,5 @@ module.exports = {
   refreshToken,
   logoutUser,
   deleteMany,
+  updateUserPassword,
 };
