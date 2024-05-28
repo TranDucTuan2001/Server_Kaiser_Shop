@@ -126,7 +126,7 @@ const updateUserPassword = (id, data) => {
       if (!comparePassword) {
         resolve({
           status: "ERR",
-          message: "Mật khẩu không đúng",
+          message: "Mật khẩu hiện tại không đúng",
         });
         return;
       }
@@ -134,7 +134,7 @@ const updateUserPassword = (id, data) => {
       if (data.newPassword !== data.confirmPassword) {
         resolve({
           status: "ERR",
-          message: "NewPassword phải bằng ConfirmPassword",
+          message: "Mật khẩu xác nhận lại không đúng",
         });
         return;
       }
@@ -152,7 +152,7 @@ const updateUserPassword = (id, data) => {
 
       resolve({
         status: "OK",
-        message: "SUCCESS",
+        message: "Đổi mật khẩu thành công",
         data: updateUser,
       });
     } catch (e) {
