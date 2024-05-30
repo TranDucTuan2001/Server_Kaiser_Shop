@@ -91,7 +91,7 @@ const getAllDetailsOrder = (id) => {
     try {
       const order = await Order.find({
         user: id,
-      });
+      }).sort({ createdAt: -1 });
       if (order === null) {
         resolve({
           status: "ERR",
@@ -190,7 +190,7 @@ const cancelOrder = (id, data) => {
 const getAllOrder = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      const allOrder = await Order.find();
+      const allOrder = await Order.find().sort({ createdAt: -1 });;
       resolve({
         status: "OK",
         message: "SUCCESS",

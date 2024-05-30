@@ -2,7 +2,7 @@ const ProductService = require("../services/ProductService");
 
 const createProduct = async (req, res) => {
   try {
-    const { name, image, type, price, countInStock, rating, description,discount } =
+    const { name, image, type, price, countInStock, rating, description,discount,image1,image2,image3 } =
       req.body;
 
     if (!name || !image || !type || !price || !countInStock || !rating) {

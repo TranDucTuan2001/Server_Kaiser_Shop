@@ -2,7 +2,7 @@ const Product = require("../models/ProductModel");
 
 const createProduct = (newProduct) => {
   return new Promise(async (resolve, reject) => {
-    const { name, image, type, price, countInStock, rating, description,discount } =
+    const { name, image,image1,image2,image3, type, price, countInStock, rating, description,discount } =
       newProduct;
 
     try {
@@ -19,6 +19,9 @@ const createProduct = (newProduct) => {
       const newProduct = await Product.create({
         name,
         image,
+        image1,
+        image2,
+        image3,
         type,
         price,
         countInStock,
@@ -101,29 +104,30 @@ const getAllProduct = (limit, page, sort, filter) => {
     try {
       let totalProduct;
       let allProducts;
+      const query = {};
+      const options = {
+        skip: page * limit,
+        limit: limit,
+        sort: { createdAt: -1 } // default sort by newest first
+      };
 
       if (filter) {
         const label = filter[0];
-        allProducts = await Product.find({
-          [label]: { $regex: new RegExp(filter[1], "i") },
-        }).skip(page * limit).limit(limit);
-
-        totalProduct = await Product.countDocuments({
-          [label]: { $regex: new RegExp(filter[1], "i") },
-        });
-      } else if (sort) {
-        const ObjectSort = {};
-        ObjectSort[sort[1]] = sort[0];
-
-        allProducts = await Product.find().skip(page * limit).limit(limit).sort(ObjectSort);
-        totalProduct = await Product.countDocuments();
-      } else {
-        allProducts = await Product.find().skip(page * limit).limit(limit);
-        totalProduct = await Product.countDocuments();
+        query[label] = { $regex: new RegExp(filter[1], "i") };
       }
 
-      const totalPage = Math.floor(totalProduct / limit) + (totalProduct % limit !== 0 ? 1 : 0);
-      
+      if (sort) {
+        const ObjectSort = {};
+        ObjectSort[sort[1]] = sort[0];
+        options.sort = ObjectSort;
+      }
+
+      allProducts = await Product.find(query, null, options);
+      totalProduct = await Product.countDocuments(query);
+
+      const totalPage =
+        Math.floor(totalProduct / limit) + (totalProduct % limit !== 0 ? 1 : 0);
+
       resolve({
         status: "OK",
         message: "SUCCESS",
@@ -137,6 +141,7 @@ const getAllProduct = (limit, page, sort, filter) => {
     }
   });
 };
+
 
 
 const getDetailsProduct = (id) => {
