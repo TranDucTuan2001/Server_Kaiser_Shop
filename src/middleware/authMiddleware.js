@@ -41,7 +41,23 @@ const authMiddleWare = (req, res, next) => {
 };
 
 const authUserMiddleWare = (req, res, next) => {
-  const token = req.headers.token.split(" ")[1];
+  const tokenHeader = req.headers.token;
+
+  if (!tokenHeader) {
+    return res.status(404).json({
+      message: "Token authentication header is missing",
+      status: "ERR",
+    });
+  }
+  // const token = req.headers.token.split(" ")[1];
+  const token = tokenHeader?.split(" ")[1];
+
+  if (!token) {
+    return res.status(404).json({
+      message: "Input the token authentication",
+      status: "ERR",
+    });
+  }
   const userId = req.params.id;
   jwt.verify(token, process.env.ACCESS_TOKEN, function (err, user) {
     if (err) {

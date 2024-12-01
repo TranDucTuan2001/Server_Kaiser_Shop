@@ -17,6 +17,11 @@ const createUser = async (req, res) => {
         status: "ERR",
         message: "Không đúng định dạng email",
       });
+    } else if (password.length < 6) {
+      return res.status(200).json({
+        status: "ERR",
+        message: "Mật khẩu phải có ít nhất 6 ký tự",
+      });
     } else if (password !== confirmPassword) {
       return res.status(200).json({
         status: "ERR",
