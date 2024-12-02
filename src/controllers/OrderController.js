@@ -83,12 +83,18 @@ const getDetailsOrder = async (req, res) => {
 const cancelOrder = async (req, res) => {
   try {
     const orderId = req.params.orderId;
-    const data = req.body;
+    const data = req.body.data || req.body;
 
     if (!orderId) {
       return res.status(200).json({
         status: "ERR",
         message: "The orderId is required",
+      });
+    }
+    if (!Array.isArray(data) || data.length === 0) {
+      return res.status(400).json({
+        status: "ERR",
+        message: "Invalid data or empty order items",
       });
     }
     const response = await OrderService.cancelOrder(orderId, data);
